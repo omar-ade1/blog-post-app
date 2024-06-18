@@ -1,0 +1,41 @@
+/**
+ * This Style For Search Loading
+ * It Will Show When User Search About Article
+ */
+.container-icon-article-search {
+  --uib-size: 50px;
+  /* --uib-color: black; */
+  --uib-speed: 0.9s;
+  --uib-bg-opacity: 0.1;
+  height: var(--uib-size);
+  width: var(--uib-size);
+  transform-origin: center;
+  overflow: visible;
+}
+
+.car-icon-article-search {
+  fill: none;
+  stroke: rgb(0, 140, 255);
+  stroke-dasharray: 15, 85;
+  stroke-dashoffset: 0;
+  stroke-linecap: round;
+  animation: travel var(--uib-speed) linear infinite;
+  will-change: stroke-dasharray, stroke-dashoffset;
+  transition: stroke 0.5s ease;
+}
+
+.track-icon-article-search {
+  stroke: black;
+  opacity: var(--uib-bg-opacity);
+  transition: stroke 0.5s ease;
+}
+
+@keyframes travel {
+  0% {
+    stroke-dashoffset: 0;
+  }
+
+  100% {
+    stroke-dashoffset: 100;
+  }
+}

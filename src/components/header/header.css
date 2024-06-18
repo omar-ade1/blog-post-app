@@ -1,0 +1,15 @@
+.header-nav-link {
+  @apply text-lg py-1 px-2 flex justify-center font-semibold  dark:text-slate-300 hover:text-black hover:bg-gray-300 rounded-xl transition-colors duration-200;
+}
+.header-auth-btns {
+  @apply block capitalize rounded-lg  p-2 font-semibold hover:text-white transition-colors duration-200;
+}
+
+@media (max-width: 767px) {
+  .menu-open-clip {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
+  .menu-close-clip {
+    clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+  }
+}
