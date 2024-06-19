@@ -10,8 +10,9 @@ import NoArticlesFounded from "../articles/components/NoArticlesFounded";
 import { EDIT_ARTICLE } from "../fetchApis/articles/editArticle";
 import DeleteAllArticlesBtn from "./components/DeleteAllArticlesBtn";
 import Link from "next/link";
-import { motion } from "framer"
+import { motion } from "framer";
 import { Toast } from "../../components/toast";
+import moment from "moment";
 
 const AdminDashBoard = () => {
   const [refresh, setRefresh] = useState(true);
@@ -33,8 +34,6 @@ const AdminDashBoard = () => {
 
   const [titleUpdate, setTitleUpdate] = useState("");
   const [descUpdate, setDescUpdate] = useState("");
-
-
 
   // Handle Delete Function
   const handleDeleteArticle = async (id) => {
@@ -77,13 +76,19 @@ const AdminDashBoard = () => {
         title: "dark:text-white",
         htmlContainer: "dark:!text-[#eee]",
         icon: "dark:!border-yellow-500 dark:!text-yellow-500",
-      }
+      },
     }).then((result) => {
       if (result.isConfirmed) {
         // Run Delete Function
         handleDeleteArticle(id);
       }
     });
+  };
+
+  // Handle Article Date
+  const handleArticleDate = (date) => {
+    const date1 = moment.utc(date);
+    return date1.local().format("dddd, LL, LTS");
   };
 
   // Get All Articles Data When searchText Chanaged
@@ -95,7 +100,6 @@ const AdminDashBoard = () => {
     const getAllArticles = allArticlesData(searchText, pageNumber)
       .then((data) => {
         setArticle(data.data);
-
         // Hidden Loading Page First When Get Data In First Time
         setLoading(false);
 
@@ -132,7 +136,7 @@ const AdminDashBoard = () => {
           title: "dark:text-white",
           htmlContainer: "dark:!text-[#eee]",
           input: "dark:!text-[#eee]",
-          inputLabel : "dark:!text-[#eee]",
+          inputLabel: "dark:!text-[#eee]",
           icon: "dark:!border-yellow-500 dark:!text-yellow-500",
         },
         inputValidator: (value) => {
@@ -159,7 +163,7 @@ const AdminDashBoard = () => {
         title: "dark:text-white",
         htmlContainer: "dark:!text-[#eee]",
         input: "dark:!text-[#eee]",
-        inputLabel : "dark:!text-[#eee]",
+        inputLabel: "dark:!text-[#eee]",
         icon: "dark:!border-yellow-500 dark:!text-yellow-500",
       },
       inputValidator: (value) => {
@@ -232,28 +236,37 @@ const AdminDashBoard = () => {
 
                   <tbody className="w-full divide-y-2 dark:divide-gray-500">
                     {article.map((item) => (
-                      <tr key={item.id} className="divide-x-2 dark:divide-gray-500 even:bg-gray-100 odd:bg-white dark:even:bg-gray-400 dark:odd:bg-slate-400 dark:hover:bg-zinc-600 dark:hover:text-white hover:bg-blue-100 transitionDarkMode">
+                      <tr
+                        key={item.id}
+                        className="divide-x-2 dark:divide-gray-500 even:bg-gray-100 odd:bg-white dark:even:bg-gray-400 dark:odd:bg-slate-400 dark:hover:bg-zinc-600 dark:hover:text-white hover:bg-blue-100 transitionDarkMode"
+                      >
                         <td className="text-center p-2 max-w-[200px] truncate">{item.id}</td>
                         <td className="text-center p-2 max-w-[200px] truncate">{item.title}</td>
                         <td className="text-center p-2 max-w-[200px] truncate">{item.description}</td>
-                        <td className="text-center p-2 max-w-[200px] truncate">{item.createdAt}</td>
-                        <td className="text-center p-2 max-w-[200px] truncate">{item.updatedAt}</td>
+                        <td className="text-center p-2 w-fit truncate">{handleArticleDate(item?.createdAt)}</td>
+                        <td className="text-center p-2 w-fit truncate">{handleArticleDate(item?.updateAt)}</td>
                         <td className="text-center p-2 flex justify-center items-center gap-2">
-                          <motion.div whileHover={{scale:1.1}} whileTap={{scale:1}}>
+                          <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 1 }}>
                             <Link href={`/articles/${item.id}`} className="capitalize p-2 bg-blue-500 rounded text-white font-bold">
                               info
                             </Link>
                           </motion.div>
 
-                          <motion.button whileHover={{scale:1.1}} whileTap={{scale:1}}
+                          <motion.button
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 1 }}
                             onClick={() => editArticle(item.id, item.title, item.description)}
                             className="capitalize p-2 bg-orange-500 rounded text-white font-bold"
                           >
                             edit
                           </motion.button>
 
-                          <motion.button whileHover={{scale:1.1}} whileTap={{scale:1}}
-                            onClick={() => alertConfirmDelete(item.id)} className="capitalize p-2 bg-red-500 rounded text-white font-bold">
+                          <motion.button
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 1 }}
+                            onClick={() => alertConfirmDelete(item.id)}
+                            className="capitalize p-2 bg-red-500 rounded text-white font-bold"
+                          >
                             delete
                           </motion.button>
                         </td>

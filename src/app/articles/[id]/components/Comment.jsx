@@ -8,6 +8,7 @@ import { UPDATE_COMMENT } from "../../../fetchApis/comments/updateComment";
 import { BiStar } from "react-icons/bi";
 import { FaUser } from "react-icons/fa";
 import { Toast } from "../../../../components/toast";
+import moment from "moment";
 
 const Comment = ({ commentData, idUserFromToken, isAdmin, reload, setReload }) => {
   // This Is For Hide Or Show More Text In Comment
@@ -19,12 +20,12 @@ const Comment = ({ commentData, idUserFromToken, isAdmin, reload, setReload }) =
   // This Is For Storage New Updated Comment In State
   const [updateComment, setUpdatedComment] = useState(commentData.text);
 
+  const [commentDate, setCommentDate] = useState("");
+
   // This Is For Span That Contain The Comment Text
   const commentTextSpanRef = useRef();
 
   // fix
-
- 
 
   // fix
 
@@ -47,7 +48,7 @@ const Comment = ({ commentData, idUserFromToken, isAdmin, reload, setReload }) =
           title: "dark:text-white",
           htmlContainer: "dark:!text-[#eee]",
           input: "dark:!text-[#eee]",
-          inputLabel : "dark:!text-[#eee]",
+          inputLabel: "dark:!text-[#eee]",
           icon: "dark:!border-yellow-500 dark:!text-yellow-500",
         },
         inputValidator: (value) => {
@@ -105,7 +106,7 @@ const Comment = ({ commentData, idUserFromToken, isAdmin, reload, setReload }) =
         title: "dark:text-white",
         htmlContainer: "dark:!text-[#eee]",
         input: "dark:!text-[#eee]",
-        inputLabel : "dark:!text-[#eee]",
+        inputLabel: "dark:!text-[#eee]",
         icon: "dark:!border-yellow-500 dark:!text-yellow-500",
       },
     }).then((result) => {
@@ -143,6 +144,11 @@ const Comment = ({ commentData, idUserFromToken, isAdmin, reload, setReload }) =
     }
   }, [commentTextSpanRef]);
 
+  useEffect(() => {
+    const date = moment.utc(commentData?.updateAt);
+    setCommentDate(date.local().format("ddd, LL, LTS"));
+  }, [commentData]);
+
   return (
     <div className="mt-5 border  border-blue-200  rounded p-2 shadow hover:scale-[1.01] hover:shadow-xl hover:border-blue-600 transition-all duration-200">
       <div className="relative">
@@ -173,6 +179,7 @@ const Comment = ({ commentData, idUserFromToken, isAdmin, reload, setReload }) =
             <BiStar /> Admin
           </h3>
         )}
+        <h4 className="text-gray-500 font-bold text-sm mt-2">{commentDate}</h4>
       </div>
 
       <hr className="border-t-2 mt-2 dark:border-gray-500" />

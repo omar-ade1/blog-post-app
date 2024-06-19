@@ -1,1 +1,1 @@
-export const DOMAIN_NAME = "https://blog-post-o5b3.vercel.app"
+export const DOMAIN_NAME = "http://localhost:3000"
