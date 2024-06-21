@@ -4,6 +4,7 @@ import prisma from "../../../../utils/db";
 import { payloadJwt } from "../../../../utils/interfaces";
 import { generateCookie, generateToken } from "../../../../utils/generateToken";
 import * as argon2 from "argon2";
+import { setCorsHeaders } from "../../../../utils/core";
 
 /*
  * @method : POST
@@ -19,6 +20,9 @@ type body = {
 };
 export async function POST(request: NextRequest) {
   try {
+    const response = new NextResponse();
+    setCorsHeaders(response); // إعداد CORS
+  
     // Get Info Article From User
     const body: body = await request.json();
 

@@ -3,6 +3,7 @@ import prisma from "../../../../utils/db";
 import { bodyArticleEdit, payloadJwt } from "../../../../utils/interfaces";
 import { z } from "zod";
 import jwt from "jsonwebtoken";
+import { setCorsHeaders } from "../../../../utils/core";
 
 /*
  * @method : GET
@@ -13,6 +14,9 @@ import jwt from "jsonwebtoken";
 
 export async function GET(request: NextRequest, { params }) {
   try {
+    const response = new NextResponse();
+    setCorsHeaders(response); // إعداد CORS
+  
     // Get Article From Prisma
     const articles = await prisma.article.findUnique({ where: { id: parseInt(params.id) } });
 
@@ -38,6 +42,9 @@ export async function GET(request: NextRequest, { params }) {
  */
 export async function PUT(request: NextRequest, { params }) {
   try {
+    const response = new NextResponse();
+    setCorsHeaders(response); // إعداد CORS
+  
     // Get Jwttoken From Cookies
     const authToken = request.cookies.get("jwtToken");
     const token = authToken?.value as string;
@@ -109,6 +116,9 @@ export async function PUT(request: NextRequest, { params }) {
  */
 export async function DELETE(request: NextRequest, { params }) {
   try {
+    const response = new NextResponse();
+    setCorsHeaders(response); // إعداد CORS
+  
     // Get Jwttoken From Cookies
     const authToken = request.cookies.get("jwtToken");
     const token = authToken?.value as string;

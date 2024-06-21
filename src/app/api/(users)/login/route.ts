@@ -4,6 +4,7 @@ import { z } from "zod";
 import { payloadJwt } from "../../../../utils/interfaces";
 import { generateCookie } from "../../../../utils/generateToken";
 import * as argon2 from "argon2";
+import { setCorsHeaders } from "../../../../utils/core";
 
 /*
  * @method : POST
@@ -19,6 +20,10 @@ type body = {
 
 export async function POST(request: NextRequest) {
   try {
+    const response = new NextResponse();
+    setCorsHeaders(response); // إعداد CORS
+  
+
     const body: body = await request.json();
 
     // Create Schema For Checking The Inputs

@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import prisma from "../../../../utils/db";
 import { payloadJwt } from "../../../../utils/interfaces";
 import { z } from "zod";
+import { setCorsHeaders } from "../../../../utils/core";
 
 /*
  * @method : DELETE
@@ -13,6 +14,10 @@ import { z } from "zod";
  */
 export async function PUT(request: NextRequest, { params }) {
   try {
+    const response = new NextResponse();
+    setCorsHeaders(response); // إعداد CORS
+  
+
     type bodyType = {
       text: string;
     };
@@ -70,6 +75,9 @@ export async function PUT(request: NextRequest, { params }) {
  */
 export async function DELETE(request: NextRequest, { params }) {
   try {
+    const response = new NextResponse();
+    setCorsHeaders(response); // إعداد CORS
+  
     const comment = await prisma.comment.findUnique({
       where: { id: parseInt(params.id) },
     });

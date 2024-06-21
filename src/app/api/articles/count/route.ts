@@ -1,15 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "../../../../utils/db";
+import { setCorsHeaders } from "../../../../utils/core";
 
 export async function GET(request: NextRequest) {
   try {
+    const response = new NextResponse();
+    setCorsHeaders(response); // إعداد CORS
 
     // Get Search Text From Url
     const searchText = request.nextUrl.searchParams.get("searchText");
 
     // Check If There Searchtext Or Not
     if (searchText) {
-
       // If True Return The Count Of Result Search
       const articleCount = await prisma.article.count({
         where: {
@@ -21,7 +23,6 @@ export async function GET(request: NextRequest) {
       });
       return NextResponse.json({ count: articleCount }, { status: 200 });
     }
-
 
     // If False Return The Count Of All Articles
     const articleCount = await prisma.article.count();

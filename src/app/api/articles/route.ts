@@ -4,6 +4,7 @@ import { z } from "zod";
 import jwt from "jsonwebtoken";
 import { payloadJwt } from "../../../utils/interfaces";
 import { ARTICLE_IN_ONE_PAGE } from "../../../utils/articleInPage";
+import { setCorsHeaders } from "../../../utils/core";
 /*
  * @method : GET
  * @des    : Get All Articles || Get Articles By Search
@@ -12,6 +13,9 @@ import { ARTICLE_IN_ONE_PAGE } from "../../../utils/articleInPage";
  */
 export async function GET(request: NextRequest) {
   try {
+    const response = new NextResponse();
+    setCorsHeaders(response); // إعداد CORS
+  
     // Get Search Text From Url
     const searchText = request.nextUrl.searchParams.get("searchText");
 
@@ -65,6 +69,10 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
+    const response = new NextResponse();
+    setCorsHeaders(response); // إعداد CORS
+  
+
     type body = {
       title: string;
       description: string;
@@ -128,6 +136,10 @@ export async function POST(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
+    const response = new NextResponse();
+    setCorsHeaders(response); // إعداد CORS
+  
+
     // Get Jwttoken From Cookies
     const authToken = request.cookies.get("jwtToken");
     const token = authToken?.value as string;

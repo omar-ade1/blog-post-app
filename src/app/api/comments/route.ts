@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import prisma from "../../../utils/db";
 import { z } from "zod";
 import { cookies } from "next/headers";
+import { setCorsHeaders } from "../../../utils/core";
 
 /*
  * @method : GET
@@ -13,31 +14,40 @@ import { cookies } from "next/headers";
  */
 
 export async function GET(request: NextRequest) {
-  const articleID = request.nextUrl.searchParams.get("articleId");
+  try {
+    const response = new NextResponse();
+    setCorsHeaders(response); // إعداد CORS
 
-  const cookie = cookies().get("jwtToken").value;
-  const userFromToken = jwt.verify(cookie, process.env.PRIVATE_KEY_JWT) as payloadJwt;
+    const articleID = request.nextUrl.searchParams.get("articleId");
 
-  const allComments = await prisma.comment.findMany({
-    where: { articleId: parseInt(articleID) },
+    const cookie = cookies().get("jwtToken").value;
+    const userFromToken = jwt.verify(cookie, process.env.PRIVATE_KEY_JWT) as payloadJwt;
 
-    include: {
-      user: {
-        select: {
-          userName: true,
-          isAdmin: true,
+    const allComments = await prisma.comment.findMany({
+      where: { articleId: parseInt(articleID) },
+
+      include: {
+        user: {
+          select: {
+            userName: true,
+            isAdmin: true,
+          },
         },
       },
-    },
-    orderBy: {
-      id: "desc",
-    },
-  });
-  if (!allComments.length) {
-    return NextResponse.json({ message: "No Comments Founded" }, { status: 404 });
-  }
+      orderBy: {
+        id: "desc",
+      },
+    });
+    if (!allComments.length) {
+      return NextResponse.json({ message: "No Comments Founded" }, { status: 404 });
+    }
 
-  return NextResponse.json({ comments: [...allComments], idUserFromToken: userFromToken.id, isAdmin: userFromToken.isAdmin }, { status: 200 });
+    return NextResponse.json({ comments: [...allComments], idUserFromToken: userFromToken.id, isAdmin: userFromToken.isAdmin }, { status: 200 });
+    
+    // While Error
+  } catch (error) {
+    return NextResponse.json({ message: "Internal Server Error" }, { status: 500 });
+  }
 }
 
 /*
@@ -49,6 +59,10 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
+    const response = new NextResponse();
+    setCorsHeaders(response); // إعداد CORS
+
+
     type body = {
       text: string;
       articleId: string;
@@ -88,7 +102,6 @@ export async function POST(request: NextRequest) {
     if (!article) {
       return NextResponse.json({ message: "Article Not Found" }, { status: 404 });
     }
-
 
     const newComment = await prisma.comment.create({
       data: {

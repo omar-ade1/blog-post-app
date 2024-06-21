@@ -6,6 +6,7 @@ import { cookies } from "next/headers";
 import { z } from "zod";
 import { generateCookie } from "../../../../../utils/generateToken";
 import * as argon2 from "argon2";
+import { setCorsHeaders } from "../../../../../utils/core";
 
 /*
  * @method : DELETE
@@ -16,6 +17,10 @@ import * as argon2 from "argon2";
 
 export async function DELETE(request: NextRequest, { params }) {
   try {
+    const response = new NextResponse();
+    setCorsHeaders(response); // إعداد CORS
+  
+    
     // Get Jwttoken From Cookies
     const authToken = request.cookies.get("jwtToken");
     const token = authToken?.value as string;
@@ -67,6 +72,9 @@ export async function DELETE(request: NextRequest, { params }) {
  */
 export async function PUT(request: NextRequest, { params }) {
   try {
+    const response = new NextResponse();
+    setCorsHeaders(response); // إعداد CORS
+  
     // Get Jwttoken From Cookies
     const authToken = request.cookies.get("jwtToken");
     const token = authToken?.value as string;
