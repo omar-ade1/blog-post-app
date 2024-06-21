@@ -18,13 +18,19 @@ type body = {
   password: string;
 };
 
+console.log(true);
 export async function POST(request: NextRequest) {
   try {
+    console.log(true);
+    
     const response = new NextResponse();
     setCorsHeaders(response); // إعداد CORS
   
+    console.log(true);
 
     const body: body = await request.json();
+
+    console.log(true);
 
     // Create Schema For Checking The Inputs
     const bodySchema = z.object({
@@ -32,11 +38,15 @@ export async function POST(request: NextRequest) {
       password: z.string().min(6, "Password must contain at least 6 character(s)"),
     });
 
+    console.log(true);
+    
     // Checking
     const validation = bodySchema.safeParse(body);
     if (!validation.success) {
       return NextResponse.json({ message: validation.error.issues[0].message }, { status: 400 });
     }
+
+    console.log(true);
 
     // Get User From Database
     const user = await prisma.user.findUnique({ where: { email: body.email } });
@@ -46,6 +56,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ message: "Invalid Email Or Password" }, { status: 400 });
     }
 
+    console.log(true);
     
     if (await argon2.verify(user.password, body.password)) {
 
@@ -56,6 +67,8 @@ export async function POST(request: NextRequest) {
         email: user.email,
         password: user.password,
       };
+
+      console.log(true);
 
       // Generate Token
       const cookie = generateCookie(payloadJwt);
@@ -77,6 +90,8 @@ export async function POST(request: NextRequest) {
 
     // While Error
   } catch (error) {
+    console.log(error)
+    console.error(error)
     return NextResponse.json({ message: "Internal Server Error" }, { status: 500 });
   }
 }
