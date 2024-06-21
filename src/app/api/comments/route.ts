@@ -12,16 +12,25 @@ import { setCorsHeaders } from "../../../utils/core";
  * @path   : ~/comments
  * @accuss : public
  */
+console.log(true);
 
 export async function GET(request: NextRequest) {
   try {
+    console.log(true);
+
     const response = new NextResponse();
     setCorsHeaders(response); // إعداد CORS
 
+    console.log(true);
+
     const articleID = request.nextUrl.searchParams.get("articleId");
+
+    console.log(true);
 
     const cookie = cookies().get("jwtToken").value;
     const userFromToken = jwt.verify(cookie, process.env.PRIVATE_KEY_JWT) as payloadJwt;
+
+    console.log(true);
 
     const allComments = await prisma.comment.findMany({
       where: { articleId: parseInt(articleID) },
@@ -38,14 +47,22 @@ export async function GET(request: NextRequest) {
         id: "desc",
       },
     });
+
+    console.log(true);
+
     if (!allComments.length) {
       return NextResponse.json({ message: "No Comments Founded" }, { status: 404 });
     }
+
+
+    console.log(true);
 
     return NextResponse.json({ comments: [...allComments], idUserFromToken: userFromToken.id, isAdmin: userFromToken.isAdmin }, { status: 200 });
     
     // While Error
   } catch (error) {
+    console.log(error);
+    console.error(error);
     return NextResponse.json({ message: "Internal Server Error" }, { status: 500 });
   }
 }
