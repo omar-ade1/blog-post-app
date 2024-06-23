@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
 export function setCorsHeaders(response: NextResponse) {
+  response.headers.set("Access-Control-Allow-Methods", "*");
   response.headers.set('Access-Control-Allow-Credentials', 'true');
   response.headers.set('Access-Control-Allow-Origin', '*'); // يمكنك تحديد نطاق معين بدلاً من '*'
   response.headers.set('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
